@@ -1,8 +1,0 @@
-
-const App = () => {
-  return (
-    <>RENTAL CAR</>
-  );
-}
-
-export default App;
