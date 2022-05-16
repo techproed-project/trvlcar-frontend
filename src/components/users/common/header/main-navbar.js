@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import logo from "../../../../assets/img/logo/logo.png";
 import {RiHome3Line, RiCarLine, RiInformationLine, RiMapPinLine, RiUserLine} from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 const MainNavbar = () => {
   return (

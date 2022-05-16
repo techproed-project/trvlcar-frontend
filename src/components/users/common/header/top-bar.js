@@ -2,6 +2,7 @@ import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import ContactBar from './contact-bar'
 import SocialBar from './social-bar'
+import "./top-bar.css";
 
 const TopBar = () => {
   return (
