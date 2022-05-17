@@ -5,8 +5,9 @@ import slides from "./slider.json";
 
 const Slider = () => {
   return (
-    <Carousel className="slider">
+    <Carousel fade className="slider">
       {slides.map((slide, index) => {
+
         let image = require(`../../../../assets/img/slider/${slide.image}`);
 
         return (

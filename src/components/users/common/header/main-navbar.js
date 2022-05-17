@@ -7,14 +7,14 @@ import "./main-navbar.css";
 
 const MainNavbar = () => {
   return (
-    <Navbar bg="light" expand="lg" className="main-navbar">
+    <Navbar expand="lg" className="main-navbar" variant="dark">
       <Container>
         <Navbar.Brand as={Link} to="/">
           <img src={logo} alt="TRVLCars Rental Car" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+          <Nav className="ms-auto">
             <Nav.Link as={Link} to="/">
               <RiHome3Line/> Home
             </Nav.Link>
@@ -24,7 +24,7 @@ const MainNavbar = () => {
             <Nav.Link as={Link} to="/about">
               <RiInformationLine/> About
             </Nav.Link>
-            <Nav.Link as={Link} to="/contact">
+            <Nav.Link as={Link} to="/contact" className="active">
               <RiMapPinLine/> Contact
             </Nav.Link>
             <Nav.Link as={Link} to="/auth">
