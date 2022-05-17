@@ -3,10 +3,11 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import logo from "../../../../assets/img/logo/logo.png";
 import {RiHome3Line, RiCarLine, RiInformationLine, RiMapPinLine, RiUserLine} from "react-icons/ri";
 import { Link } from "react-router-dom";
+import "./main-navbar.css";
 
 const MainNavbar = () => {
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="light" expand="lg" className="main-navbar">
       <Container>
         <Navbar.Brand as={Link} to="/">
           <img src={logo} alt="TRVLCars Rental Car" />

@@ -1,8 +1,11 @@
 import React from 'react'
+import Slider from '../../components/users/home/slider/slider'
 
 const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <>
+      <Slider/>
+    </>
   )
 }
 
