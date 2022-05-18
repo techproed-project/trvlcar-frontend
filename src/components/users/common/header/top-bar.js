@@ -9,8 +9,8 @@ const TopBar = () => {
     <div className="topbar">
         <Container>
             <Row>
-                <Col><SocialBar/></Col>
-                <Col><ContactBar/></Col>
+                <Col lg={3} className="d-none d-lg-block"><SocialBar/></Col>
+                <Col lg={9}><ContactBar/></Col>
             </Row>
         </Container>
     </div>
