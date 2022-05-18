@@ -7,6 +7,7 @@ import "./testimonals.css";
 import "swiper/css";
 import "swiper/css/pagination";
 import Testimonal from "./testimonal";
+import Counters from "./counters";
 
 const Testimonals = () => {
   return (
@@ -29,10 +30,7 @@ const Testimonals = () => {
             </Swiper>
           </Col>
           <Col md={6}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam
-            suscipit quis, provident explicabo porro quo iste. Recusandae
-            accusantium veritatis odio? Nemo tempora minima id dolorem iusto ea
-            non doloribus quae.
+            <Counters/>
           </Col>
         </Row>
       </Container>
