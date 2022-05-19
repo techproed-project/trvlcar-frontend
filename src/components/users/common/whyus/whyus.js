@@ -2,10 +2,12 @@ import React from "react";
 import { Container } from "react-bootstrap";
 import data from "./whyus.json";
 import "./whyus.css";
+import SectionHeader from "../section-header/section-header";
 
 const WhyUs = () => {
   return (
     <section className="whyus">
+      <SectionHeader title="Why People Like Us" desc="Inbecilloque elegans errorem concedo etsi electram."/>
       <Container>
         <ul className="row g-5">
           {data.map((item, index) => (
