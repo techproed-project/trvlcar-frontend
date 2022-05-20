@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Container, Row, Tab, Tabs } from "react-bootstrap";
+import { Card, Col, Container, Row, Tab, Tabs } from "react-bootstrap";
 import "./auth.css";
 import logo from "../../../assets/img/logo/logo.png";
 import { RiCloseCircleLine } from "react-icons/ri";
@@ -21,14 +21,18 @@ const Auth = () => {
           />
         </Col>
         <Col md={5}>
-          <Tabs defaultActiveKey="login" className="mb-3">
-            <Tab eventKey="login" title="Login">
-              <LoginForm/>
-            </Tab>
-            <Tab eventKey="register" title="Register">
-              <RegisterForm/>
-            </Tab>
-          </Tabs>
+          <Card>
+            <Card.Body>
+              <Tabs defaultActiveKey="login" className="mb-3">
+                <Tab eventKey="login" title="Login">
+                  <LoginForm />
+                </Tab>
+                <Tab eventKey="register" title="Register">
+                  <RegisterForm />
+                </Tab>
+              </Tabs>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
     </Container>
