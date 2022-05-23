@@ -9,6 +9,7 @@ const ProfilePage = () => {
         <PageHeader title="Profile"/>
         <Spacer/>
         <Profile/>
+        <Spacer/>
     </>
   )
 }

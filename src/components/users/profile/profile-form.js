@@ -6,16 +6,16 @@ import { useFormik } from "formik";
 import { updateProfile } from "../../../api/user-service";
 import { toast } from "react-toastify";
 
-const ProfileForm = () => {
+const ProfileForm = ({user}) => {
   const [loading, setLoading] = useState(false);
 
   const initialValues = {
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    address: "",
-    zipCode: "",
-    email: "",
+    firstName: user.firstName,
+    lastName: user.lastName,
+    phoneNumber: user.phoneNumber,
+    address: user.address,
+    zipCode: user.zipCode,
+    email: user.email,
   };
 
   const validationSchema = Yup.object({
@@ -134,7 +134,7 @@ const ProfileForm = () => {
       </Form.Group>
       
       <Button variant="primary" type="submit" disabled={loading}>
-        {loading && <Spinner animation="border" size="sm" />} Register
+        {loading && <Spinner animation="border" size="sm" />} Update
       </Button>
     </Form>
   );

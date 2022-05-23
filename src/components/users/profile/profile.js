@@ -11,17 +11,17 @@ const Profile = () => {
 
   return (
     <Container>
-      <Row>
-        <Col md={2} className="text-center">
+      <Row className="g-5">
+        <Col lg={2} className="text-center">
           <FaUserCircle size="120" />
           <h4>{`${user.firstName} ${user.lastName}`}</h4>
           <em>{user.email}</em>
         </Col>
-        <Col md={5}>
+        <Col lg={5}>
           <h3>Update Profile</h3>
-          <ProfileForm />
+          <ProfileForm user={user} />
         </Col>
-        <Col md={5}>
+        <Col lg={5}>
           <h3>Update Password</h3>
           <PasswordForm />
         </Col>
