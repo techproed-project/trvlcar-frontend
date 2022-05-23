@@ -4,6 +4,7 @@ import AboutPage from "../pages/users/AboutPage";
 import AuthPage from "../pages/users/AuthPage";
 import ContactPage from "../pages/users/ContactPage";
 import HomePage from "../pages/users/HomePage";
+import ProfilePage from "../pages/users/ProfilePage";
 import VehicleDetailsPage from "../pages/users/VehicleDetailsPage";
 import VehiclesPage from "../pages/users/VehiclesPage";
 import UserTemplate from "../templates/user-template";
@@ -26,6 +27,12 @@ const CustomRoutes = () => {
             <Route index element={<UserTemplate><VehiclesPage /></UserTemplate>} />
             <Route path=":vehicleId" element={<UserTemplate><VehicleDetailsPage /></UserTemplate>} />
           </Route>
+
+          <Route path="user">
+            <Route index element={<UserTemplate><ProfilePage /></UserTemplate>} />
+          </Route>
+
+
         </Route>
       </Routes>
     </BrowserRouter>

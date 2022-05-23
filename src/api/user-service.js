@@ -15,4 +15,8 @@ const getUser = () => {
     return axios.get(`${API_URL}/user`, { headers:  authHeader() });
 }
 
-export {login, getUser, register};
+const updateProfile = (user) => {
+    return axios.put(`${API_URL}/user`, user, { headers:  authHeader() });
+}
+
+export {login, getUser, register, updateProfile};

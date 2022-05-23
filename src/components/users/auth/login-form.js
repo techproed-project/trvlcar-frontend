@@ -82,8 +82,6 @@ const LoginForm = () => {
           isInvalid={formik.touched.password && formik.errors.password}
           isValid={formik.touched.password && !formik.errors.password}
           error={formik.errors.password}/>
-
-        
       </Form.Group>
       <Button variant="primary" type="submit" disabled={loading}>
         {loading && <Spinner animation="border" size="sm"/>}  Login

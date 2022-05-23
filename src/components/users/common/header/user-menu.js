@@ -31,7 +31,7 @@ const UserMenu = () => {
           <NavDropdown.Item as={Link} to="/user/reservations">
             Reservations
           </NavDropdown.Item>
-          <NavDropdown.Item as={Link} to="/user/profile">
+          <NavDropdown.Item as={Link} to="/user">
             Profile
           </NavDropdown.Item>
           <NavDropdown.Divider />
