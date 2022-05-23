@@ -7,9 +7,12 @@ const login = (credentials) => {
     return axios.post(`${API_URL}/login`, credentials);
 }
 
+const register = (user) => {
+    return axios.post(`${API_URL}/register`, user);
+}
 
 const getUser = () => {
     return axios.get(`${API_URL}/user`, { headers:  authHeader() });
 }
 
-export {login, getUser};
+export {login, getUser, register};
