@@ -8,6 +8,7 @@ import ProfilePage from "../pages/users/ProfilePage";
 import VehicleDetailsPage from "../pages/users/VehicleDetailsPage";
 import VehiclesPage from "../pages/users/VehiclesPage";
 import UserTemplate from "../templates/user-template";
+import ProtectedRoute from "./protected-route";
 
 const CustomRoutes = () => {
   return (
@@ -29,7 +30,7 @@ const CustomRoutes = () => {
           </Route>
 
           <Route path="user">
-            <Route index element={<UserTemplate><ProfilePage /></UserTemplate>} />
+            <Route index element={<ProtectedRoute><UserTemplate><ProfilePage /></UserTemplate></ProtectedRoute>} />
           </Route>
 
 

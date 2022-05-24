@@ -14,11 +14,14 @@ const App = () => {
 
   const loadData = async () =>  { 
     try {
-      let resp = await getUser();
-      dispatchUser(loginSuccess(resp.data));
-
-      resp = await getVehicles();
+      let resp = await getVehicles();
       dispatchVehicle(setVehicles(resp.data));
+
+      const token = localStorage.getItem("token");
+      if(token){
+        resp = await getUser();
+        dispatchUser(loginSuccess(resp.data));
+      }
 
       setLoading(false);
       

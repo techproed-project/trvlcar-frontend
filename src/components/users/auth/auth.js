@@ -15,7 +15,7 @@ const Auth = () => {
     <Container fluid className="auth">
       <Row>
         <Col md={7}>
-          <img src={logo} />
+          <img src={logo} alt="TRVLCar"/>
           <RiCloseCircleLine
             className="close-btn"
             onClick={() => navigate(-1)}

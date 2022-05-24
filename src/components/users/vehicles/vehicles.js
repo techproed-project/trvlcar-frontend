@@ -9,7 +9,7 @@ const Vehicles = () => {
   return (
     <Container>
       <Row className="g-4">
-        {vehicles.slice(0, 8).map((vehicle, index) => (
+        {vehicles.map((vehicle, index) => (
           <Col key={index} md={6} lg={3}>
             <VehicleCard vehicle={vehicle} />
           </Col>

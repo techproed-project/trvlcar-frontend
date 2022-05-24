@@ -1,0 +1,25 @@
+.vehicle-details div[class^="col"]:first-child{
+    position: relative;
+}
+
+.vehicle-details .price{
+    background-color: var(--color1);
+    padding: 0.5rem 1rem;
+    border-radius: 5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+    position: absolute;
+    top:0;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 1px 1px 7px gray;
+    display: flex;
+    align-items: center;
+    gap:0.3rem
+}
+
+.vehicle-details .price span{
+    font-size: 0.8rem;
+    font-weight: 400;
+}
