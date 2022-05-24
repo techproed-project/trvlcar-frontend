@@ -27,6 +27,7 @@ const VehicleDetailsPage = () => {
     <VehicleDetails vehicle={selectedVehicle}/>
     <Spacer/>
     <VehicleBookingForm/>
+    <Spacer/>
     </>
   )
 }
