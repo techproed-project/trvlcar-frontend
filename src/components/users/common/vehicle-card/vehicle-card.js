@@ -20,17 +20,17 @@ const VehicleCard = ({ vehicle }) => {
       <Card.Body>
         <Card.Title>{model}</Card.Title>
         <Card.Text>
-          <ul>
-            <li>
+          <ul className="row g-1">
+            <li className="col-6">
               <RiGasStationFill /> {fuelType}
             </li>
-            <li>
+            <li className="col-6">
               <IoIosSnow /> {airConditioning ? "AC exists" : "AC not exists"}
             </li>
-            <li>
+            <li className="col-6">
               <RiCarLine /> {doors} doors
             </li>
-            <li>
+            <li className="col-6">
               <RiCaravanLine /> {luggage} lt
             </li>
           </ul>

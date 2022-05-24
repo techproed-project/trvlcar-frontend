@@ -9,9 +9,7 @@ import UserMenu from "./user-menu";
 const MainNavbar = () => {
   const location = useLocation();
   const currentPath = location.pathname;
-
-  console.log(currentPath);
-
+  
   return (
     <Navbar expand="lg" className="main-navbar" variant="dark">
       <Container>

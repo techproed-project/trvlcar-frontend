@@ -18,7 +18,6 @@ const App = () => {
       dispatchUser(loginSuccess(resp.data));
 
       resp = await getVehicles();
-      console.log(resp.data);
       dispatchVehicle(setVehicles(resp.data));
 
       setLoading(false);

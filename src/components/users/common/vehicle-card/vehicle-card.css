@@ -2,6 +2,14 @@
     position: relative;
 }
 
+.vehicle-card{
+    cursor: pointer;
+}
+
+.vehicle-card:hover{
+    background-color: #ececec;
+}
+
 .vehicle-card .price{
     position: absolute;
     bottom:0;
