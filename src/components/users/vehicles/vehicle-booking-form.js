@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Form,
@@ -12,10 +12,14 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import MaskedInput from "react-maskedinput";
 import SectionHeader from "../common/section-header/section-header";
+import moment from "moment";
+import { isVehicleAvailable } from "../../../api/reservation-service";
 
 const VehicleBookingForm = ({ vehicle }) => {
+  const [isCarAvailable, setIsCarAvailable] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
+
   const initialValues = {
-    car: "",
     pickUpLocation: "",
     dropOfLocation: "",
     pickUpDate: "",
@@ -56,13 +60,40 @@ const VehicleBookingForm = ({ vehicle }) => {
     onSubmit,
   });
 
+  const checkTheCarIsAvailable = async () => {
+    const { pickUpDate, pickUpTime, dropOffDate, dropOffTime } = formik.values;
+
+    if (!pickUpDate || !pickUpTime || !dropOffDate || !dropOffTime) return;
+
+    const dto = {
+      carId: vehicle.id,
+      pickUpDateTime: moment(`${pickUpDate} ${pickUpTime}`).format("MM/DD/YYYY HH:mm:ss"),
+      dropOffDateTime:moment(`${dropOffDate} ${dropOffTime}`).format("MM/DD/YYYY HH:mm:ss")
+    }
+
+    try {
+      const resp = await isVehicleAvailable(dto);
+      const { isAvailable, totalPrice } = resp.data;
+
+      setIsCarAvailable(isAvailable);
+      setTotalPrice(totalPrice);
+
+
+    } catch (error) {
+      console.log(error);
+    }
+    
+
+
+  };
+
   return (
     <>
       <SectionHeader title="Booking Form" />
       <Form noValidate onSubmit={formik.handleSubmit}>
         <Container>
           <Row>
-            <Col md={6}>
+            <Col md={isCarAvailable ? 6 : 12}>
               <FloatingLabel label="Pickup Location" className="mb-3">
                 <Form.Control
                   type="text"
@@ -153,7 +184,7 @@ const VehicleBookingForm = ({ vehicle }) => {
                 </FloatingLabel>
               </InputGroup>
             </Col>
-            <Col md={6}>
+            <Col md={6} className={isCarAvailable ? "d-block" : "d-none"}>
               <FloatingLabel label="Card Number" className="mb-3">
                 <Form.Control
                   type="text"
@@ -223,8 +254,18 @@ const VehicleBookingForm = ({ vehicle }) => {
               />
             </Col>
             <Col className="text-center">
-              <Button variant="primary" size="lg" type="submit">
+              <Button variant="primary" size="lg" type="submit" className={isCarAvailable ? "d-block" : "d-none"}>
                 Book Now
+              </Button>
+
+              <Button
+                variant="secondary"
+                size="lg"
+                type="button"
+                onClick={checkTheCarIsAvailable}
+                className={isCarAvailable ? "d-none" : "d-block"}
+              >
+                Check Avaliabilty
               </Button>
             </Col>
           </Row>
