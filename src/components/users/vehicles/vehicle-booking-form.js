@@ -7,6 +7,8 @@ import {
   FloatingLabel,
   InputGroup,
   Button,
+  Spinner,
+  Alert,
 } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -14,8 +16,10 @@ import MaskedInput from "react-maskedinput";
 import SectionHeader from "../common/section-header/section-header";
 import moment from "moment";
 import { isVehicleAvailable } from "../../../api/reservation-service";
+import { toast } from "react-toastify";
 
 const VehicleBookingForm = ({ vehicle }) => {
+  const [loading, setLoading] = useState(false);
   const [isCarAvailable, setIsCarAvailable] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -71,16 +75,24 @@ const VehicleBookingForm = ({ vehicle }) => {
       dropOffDateTime:moment(`${dropOffDate} ${dropOffTime}`).format("MM/DD/YYYY HH:mm:ss")
     }
 
+    setLoading(true);
+
     try {
       const resp = await isVehicleAvailable(dto);
       const { isAvailable, totalPrice } = resp.data;
 
       setIsCarAvailable(isAvailable);
       setTotalPrice(totalPrice);
-
+      
+      if(!isAvailable){
+        toast("The car you selected is not available in these days. Please select another one");
+      }
 
     } catch (error) {
       console.log(error);
+    }
+    finally{
+      setLoading(false);
     }
     
 
@@ -133,6 +145,7 @@ const VehicleBookingForm = ({ vehicle }) => {
                     isInvalid={
                       formik.touched.pickUpDate && formik.errors.pickUpDate
                     }
+                    onBlur={checkTheCarIsAvailable}
                   />
                   <Form.Control.Feedback type="invalid">
                     {formik.errors.pickUpDate}
@@ -147,6 +160,7 @@ const VehicleBookingForm = ({ vehicle }) => {
                     isInvalid={
                       formik.touched.pickUpTime && formik.errors.pickUpTime
                     }
+                    onBlur={checkTheCarIsAvailable}
                   />
                   <Form.Control.Feedback type="invalid">
                     {formik.errors.pickUpTime}
@@ -163,6 +177,7 @@ const VehicleBookingForm = ({ vehicle }) => {
                     isInvalid={
                       formik.touched.dropOffDate && formik.errors.dropOffDate
                     }
+                    onBlur={checkTheCarIsAvailable}
                   />
                   <Form.Control.Feedback type="invalid">
                     {formik.errors.dropOffDate}
@@ -177,6 +192,7 @@ const VehicleBookingForm = ({ vehicle }) => {
                     isInvalid={
                       formik.touched.dropOffTime && formik.errors.dropOffTime
                     }
+                    onBlur={checkTheCarIsAvailable}
                   />
                   <Form.Control.Feedback type="invalid">
                     {formik.errors.dropOffTime}
@@ -185,6 +201,7 @@ const VehicleBookingForm = ({ vehicle }) => {
               </InputGroup>
             </Col>
             <Col md={6} className={isCarAvailable ? "d-block" : "d-none"}>
+              <Alert variant="success">Total Price: <b>${totalPrice}</b></Alert>
               <FloatingLabel label="Card Number" className="mb-3">
                 <Form.Control
                   type="text"
@@ -264,8 +281,9 @@ const VehicleBookingForm = ({ vehicle }) => {
                 type="button"
                 onClick={checkTheCarIsAvailable}
                 className={isCarAvailable ? "d-none" : "d-block"}
+                disabled={loading}
               >
-                Check Avaliabilty
+                {loading && <Spinner animation="border" size="sm"/>}  Check Avaliabilty
               </Button>
             </Col>
           </Row>
