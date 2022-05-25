@@ -15,13 +15,15 @@ import * as Yup from "yup";
 import MaskedInput from "react-maskedinput";
 import SectionHeader from "../common/section-header/section-header";
 import moment from "moment";
-import { isVehicleAvailable } from "../../../api/reservation-service";
+import { createReservation, isVehicleAvailable } from "../../../api/reservation-service";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const VehicleBookingForm = ({ vehicle }) => {
   const [loading, setLoading] = useState(false);
   const [isCarAvailable, setIsCarAvailable] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
+  const navigate = useNavigate();
 
   const initialValues = {
     pickUpLocation: "",
@@ -56,7 +58,46 @@ const VehicleBookingForm = ({ vehicle }) => {
     ),
   });
 
-  const onSubmit = (values) => {};
+  const onSubmit = async (values) => {
+    const {
+      pickUpLocation,
+      dropOfLocation,
+      pickUpDate,
+      pickUpTime,
+      dropOffDate,
+      dropOffTime,
+    } = values;
+
+    const dto = {
+      carId: vehicle.id,
+      pickUpTime: moment(`${pickUpDate} ${pickUpTime}`).format(
+        "MM/DD/YYYY HH:mm:ss"
+      ),
+      dropOfTime: moment(`${dropOffDate} ${dropOffTime}`).format(
+        "MM/DD/YYYY HH:mm:ss"
+      ),
+      pickUpLocation: pickUpLocation,
+      dropOfLocation: dropOfLocation,
+    };
+
+    setLoading(true);
+
+    try {
+      await createReservation(dto);
+      toast("Reservation created successfully");
+      navigate("/");
+
+    } catch (err) {
+      toast(err.response.data.message);
+    }
+    finally{
+      setLoading(false);
+    }
+
+    
+
+
+  };
 
   const formik = useFormik({
     initialValues,
@@ -71,9 +112,13 @@ const VehicleBookingForm = ({ vehicle }) => {
 
     const dto = {
       carId: vehicle.id,
-      pickUpDateTime: moment(`${pickUpDate} ${pickUpTime}`).format("MM/DD/YYYY HH:mm:ss"),
-      dropOffDateTime:moment(`${dropOffDate} ${dropOffTime}`).format("MM/DD/YYYY HH:mm:ss")
-    }
+      pickUpDateTime: moment(`${pickUpDate} ${pickUpTime}`).format(
+        "MM/DD/YYYY HH:mm:ss"
+      ),
+      dropOffDateTime: moment(`${dropOffDate} ${dropOffTime}`).format(
+        "MM/DD/YYYY HH:mm:ss"
+      ),
+    };
 
     setLoading(true);
 
@@ -83,20 +128,17 @@ const VehicleBookingForm = ({ vehicle }) => {
 
       setIsCarAvailable(isAvailable);
       setTotalPrice(totalPrice);
-      
-      if(!isAvailable){
-        toast("The car you selected is not available in these days. Please select another one");
-      }
 
+      if (!isAvailable) {
+        toast(
+          "The car you selected is not available in these days. Please select another one"
+        );
+      }
     } catch (error) {
       console.log(error);
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
-    
-
-
   };
 
   return (
@@ -201,7 +243,9 @@ const VehicleBookingForm = ({ vehicle }) => {
               </InputGroup>
             </Col>
             <Col md={6} className={isCarAvailable ? "d-block" : "d-none"}>
-              <Alert variant="success">Total Price: <b>${totalPrice}</b></Alert>
+              <Alert variant="success">
+                Total Price: <b>${totalPrice}</b>
+              </Alert>
               <FloatingLabel label="Card Number" className="mb-3">
                 <Form.Control
                   type="text"
@@ -271,8 +315,14 @@ const VehicleBookingForm = ({ vehicle }) => {
               />
             </Col>
             <Col className="text-center">
-              <Button variant="primary" size="lg" type="submit" className={isCarAvailable ? "d-block" : "d-none"}>
-                Book Now
+              <Button
+                variant="primary"
+                size="lg"
+                type="submit"
+                className={isCarAvailable ? "d-block" : "d-none"}
+                disabled={loading}
+              >
+                {loading && <Spinner animation="border" size="sm" />} Book Now
               </Button>
 
               <Button
@@ -283,7 +333,8 @@ const VehicleBookingForm = ({ vehicle }) => {
                 className={isCarAvailable ? "d-none" : "d-block"}
                 disabled={loading}
               >
-                {loading && <Spinner animation="border" size="sm"/>}  Check Avaliabilty
+                {loading && <Spinner animation="border" size="sm" />} Check
+                Avaliabilty
               </Button>
             </Col>
           </Row>
