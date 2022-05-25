@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import NotFoundPage from "../pages/common/NotFoundPage";
 import AboutPage from "../pages/users/AboutPage";
 import AuthPage from "../pages/users/AuthPage";
 import ContactPage from "../pages/users/ContactPage";
@@ -33,7 +34,7 @@ const CustomRoutes = () => {
             <Route index element={<ProtectedRoute><UserTemplate><ProfilePage /></UserTemplate></ProtectedRoute>} />
           </Route>
 
-
+          <Route path='*' element={<UserTemplate><NotFoundPage /></UserTemplate>} />
         </Route>
       </Routes>
     </BrowserRouter>
