@@ -60,7 +60,7 @@ const Reservations = () => {
             </tr>
           ))}
 
-          {reservations.length <= 0 && (
+          { !loading && reservations.length <= 0 && (
             <tr className="table-warning">
               <td colSpan={5}>No reservation</td>
             </tr>
