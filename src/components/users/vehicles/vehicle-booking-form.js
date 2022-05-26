@@ -71,7 +71,6 @@ const VehicleBookingForm = ({ vehicle }) => {
         if (!date.isValid()) return false;
         if (date < new Date()) return false;
         return true;
-
       }),
     cvc: Yup.number()
       .typeError("Must be number")
