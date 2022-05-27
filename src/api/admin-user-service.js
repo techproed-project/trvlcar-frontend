@@ -7,4 +7,15 @@ const getUsers = () => {
   return axios.get(`${API_URL}/user/auth/all`, { headers: authHeader() });
 };
 
-export { getUsers }
+const downloadUsers = () => {
+  return axios.get(`${API_URL}/excel/download/users`, {
+    headers: {
+      ...authHeader(),
+      "Content-Type":
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    },
+    responseType: 'blob'
+  });
+};
+
+export { getUsers, downloadUsers };
