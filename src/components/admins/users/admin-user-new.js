@@ -14,6 +14,7 @@ import {
   FormCheck,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { createUser } from "../../../api/admin-user-service";
 
 const AdminUserNew = () => {
   const [loading, setLoading] = useState(false);
@@ -27,7 +28,7 @@ const AdminUserNew = () => {
     address: "",
     zipCode: "",
     password: "",
-    roles: ["Customer"],
+    roles: ["Customer"],   
   };
 
   const validationSchema = Yup.object({
@@ -47,7 +48,19 @@ const AdminUserNew = () => {
     roles: Yup.array().required("Please select a role"),
   });
 
-  const onSubmit = (values) => {};
+  const onSubmit = async (values) => {
+    setLoading(true);
+    try {
+      await createUser(values);
+      toast("User was created successfully");
+      formik.resetForm();
+    } catch (err) {
+      console.log(err);
+      toast(err.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const formik = useFormik({
     enableReinitialize: true,

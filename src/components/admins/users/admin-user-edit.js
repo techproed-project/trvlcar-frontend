@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import {
@@ -13,6 +13,8 @@ import {
 
 import MaskedInput from "react-maskedinput";
 import { useNavigate, useParams } from "react-router-dom";
+import { getUser } from "../../../api/admin-user-service";
+import { toast } from "react-toastify";
 
 const AdminUserEdit = () => {
   const [initialValues, setInitialValues] = useState({
@@ -24,10 +26,12 @@ const AdminUserEdit = () => {
     zipCode: "",
     username: "",
     password: "",
-    roles: ["Customer"],
+    roles: [],
     builtIn: false,
   });
 
+
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const { userId } = useParams();
@@ -55,6 +59,24 @@ const AdminUserEdit = () => {
   });
 
   
+  const loadData = async () => { 
+    try {
+      const resp = await getUser(userId);
+      console.log(resp.data);
+      setInitialValues(resp.data);
+    } catch (err) {
+      console.log(err);
+      toast(err.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadData();
+  }, []);
+  
+
 
  
 
