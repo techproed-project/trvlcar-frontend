@@ -5,14 +5,14 @@ import { Link } from "react-router-dom";
 
 const AdminVehicles = () => {
   const [loadingDownload, setLoadingDownload] = useState(false);
-  const handleDownload = () => { 
-    
-   }
+  const handleDownload = () => {};
 
   return (
     <div>
       <ButtonGroup aria-label="Basic example">
-        <Button variant="primary" as={Link} to="/admin/vehicles/new">New Vehicle</Button>
+        <Button variant="primary" as={Link} to="/admin/vehicles/new">
+          New Vehicle
+        </Button>
         <Button
           variant="secondary"
           onClick={handleDownload}
@@ -23,10 +23,7 @@ const AdminVehicles = () => {
         </Button>
       </ButtonGroup>
 
-      <DataTable
-        title="Vehicles"
-        
-      />
+      <DataTable title="Vehicles" />
     </div>
   );
 };

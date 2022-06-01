@@ -11,6 +11,14 @@ const getReservation = (id) => {
   return axios.get(`${API_URL}/reservations/${id}/admin`, { headers: authHeader() });
 };
 
+const deleteReservation = (id) => {
+  return axios.delete(`${API_URL}/reservations/admin/${id}/auth`, { headers: authHeader() });
+};
+
+const updateReservation = (id, carId, reservation) => {
+  return axios.put(`${API_URL}/reservations/admin/auth?carId=${carId}&reservationId=${id}`, reservation, { headers: authHeader() });
+};
+
 
 const downloadReservations = () => {
   return axios.get(`${API_URL}/excel/download/reservations`, {
@@ -26,4 +34,4 @@ const downloadReservations = () => {
 
 
 
-export { getReservations, getReservation, downloadReservations };
+export { getReservations, getReservation, deleteReservation, updateReservation, downloadReservations };

@@ -71,7 +71,6 @@ const AdminReservations = () => {
   ];
 
   const handleEdit = (row) => {
-    console.log(row);
     navigate(`/admin/reservations/${row.id}`);
   };
 

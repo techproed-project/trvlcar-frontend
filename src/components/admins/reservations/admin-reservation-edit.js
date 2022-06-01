@@ -12,9 +12,15 @@ import {
 } from "react-bootstrap";
 
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getReservation } from "../../../api/admin-reservation-service";
+import {
+  deleteReservation,
+  getReservation,
+  updateReservation,
+} from "../../../api/admin-reservation-service";
 import moment from "moment";
 import { useStore } from "../../../store";
+import alertify from "alertifyjs";
+import { toast } from "react-toastify";
 
 const AdminReservationEdit = () => {
   const [initialValues, setInitialValues] = useState({
@@ -26,7 +32,7 @@ const AdminReservationEdit = () => {
     dropOffTime: "",
     car: "",
     status: "",
-    userId: ""
+    userId: "",
   });
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -47,7 +53,36 @@ const AdminReservationEdit = () => {
     status: Yup.string().required("Select a status"),
   });
 
-  const onSubmit = (values) => {};
+  const onSubmit = async (values) => {
+    setSaving(true);
+    try {
+      const {
+        pickUpDate,
+        pickUpTime,
+        dropOffDate,
+        dropOffTime,
+        pickUpLocation,
+        dropOfLocation,
+        status,
+      } = values;
+
+      const reservationDto = {
+        pickUpTime: formatDateTime(pickUpDate, pickUpTime),
+        dropOfTime: formatDateTime(dropOffDate, dropOffTime),
+        pickUpLocation: pickUpLocation,
+        dropOfLocation: dropOfLocation,
+        status: status,
+      };
+
+      await updateReservation(reservationId, values.car, reservationDto);
+      toast("Reservation updated successfully");
+    } catch (err) {
+      console.log(err);
+      toast(err.response.data.message);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -56,7 +91,29 @@ const AdminReservationEdit = () => {
     onSubmit,
   });
 
-  const handleDelete = () => {};
+  const removeReservation = async () => {
+    try {
+      setDeleting(true);
+      await deleteReservation(reservationId);
+      toast("Reservation deleted successfully");
+      navigate(-1);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const handleDelete = () => {
+    alertify.confirm(
+      "Delete",
+      "Are you sure want to delete?",
+      () => {
+        removeReservation();
+      },
+      () => {}
+    );
+  };
 
   const loadData = async () => {
     try {
@@ -70,7 +127,7 @@ const AdminReservationEdit = () => {
         dropOfTime,
         car,
         status,
-        userId
+        userId,
       } = resp.data;
 
       const reservationDto = {
@@ -82,7 +139,7 @@ const AdminReservationEdit = () => {
         dropOffTime: moment(dropOfTime).format("HH:mm"),
         car: car.id,
         status: status,
-        userId: userId
+        userId: userId,
       };
 
       setInitialValues(reservationDto);
@@ -95,6 +152,10 @@ const AdminReservationEdit = () => {
   useEffect(() => {
     loadData();
   }, []);
+
+  const formatDateTime = (date, time) => {
+    return moment(`${date} ${time}`).format("MM/DD/YYYY HH:mm:ss");
+  };
 
   return (
     <Form noValidate onSubmit={formik.handleSubmit}>
@@ -201,7 +262,9 @@ const AdminReservationEdit = () => {
         <Form.Group as={Col} md={4} lg={3} className="mb-3">
           <Form.Label>Customer</Form.Label>
           <div>
-            <Link to={`/admin/users/${initialValues.userId}`}>Get customer</Link>
+            <Link to={`/admin/users/${initialValues.userId}`}>
+              Get customer
+            </Link>
           </div>
         </Form.Group>
       </Row>
@@ -220,7 +283,12 @@ const AdminReservationEdit = () => {
             Cancel
           </Button>
 
-          <Button type="button" variant="danger" disabled={deleting}>
+          <Button
+            type="button"
+            variant="danger"
+            disabled={deleting}
+            onClick={handleDelete}
+          >
             {deleting && (
               <Spinner animation="border" variant="light" size="sm" />
             )}{" "}
