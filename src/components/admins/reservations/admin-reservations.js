@@ -2,14 +2,14 @@ import fileDownload from "js-file-download";
 import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup, Spinner } from "react-bootstrap";
 import DataTable from "react-data-table-component";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { downloadReservations, getReservations } from "../../../api/admin-reservation-service";
 
 const AdminReservations = () => {
   const [downloading, setDownloading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [reservations, setReservations] = useState([]);
-
+  const navigate = useNavigate();
 
   const handleDownload = async () => {
     try {
@@ -70,6 +70,11 @@ const AdminReservations = () => {
     },
   ];
 
+  const handleEdit = (row) => {
+    console.log(row);
+    navigate(`/admin/reservations/${row.id}`);
+  };
+
   return (
     <div>
       <ButtonGroup aria-label="Basic example">
@@ -89,6 +94,7 @@ const AdminReservations = () => {
         data={reservations}
         progressPending={loading}
         pagination
+        onRowClicked={handleEdit}
       />
     </div>
   );

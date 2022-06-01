@@ -7,6 +7,10 @@ const getReservations = () => {
   return axios.get(`${API_URL}/reservations/admin/all`, { headers: authHeader() });
 };
 
+const getReservation = (id) => {
+  return axios.get(`${API_URL}/reservations/${id}/admin`, { headers: authHeader() });
+};
+
 
 const downloadReservations = () => {
   return axios.get(`${API_URL}/excel/download/reservations`, {
@@ -22,4 +26,4 @@ const downloadReservations = () => {
 
 
 
-export { getReservations, downloadReservations };
+export { getReservations, getReservation, downloadReservations };
