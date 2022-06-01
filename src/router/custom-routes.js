@@ -1,9 +1,14 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AdminDashboardPage from "../pages/admins/AdminDashboardPage";
+import AdminReservationEditPage from "../pages/admins/AdminReservationEditPage";
+import AdminReservationsPage from "../pages/admins/AdminReservationsPage";
 import AdminUsersEditPage from "../pages/admins/AdminUsersEditPage";
 import AdminUsersNewPage from "../pages/admins/AdminUsersNewPage";
 import AdminUsersPage from "../pages/admins/AdminUsersPage";
+import AdminVehicleEditPage from "../pages/admins/AdminVehicleEditPage";
+import AdminVehiclesNewPage from "../pages/admins/AdminVehiclesNewPage";
+import AdminVehiclesPage from "../pages/admins/AdminVehiclesPage";
 import NotFoundPage from "../pages/common/NotFoundPage";
 import UnAuthorizedPage from "../pages/common/UnAuthorizedPage";
 import AboutPage from "../pages/users/AboutPage";
@@ -34,6 +39,15 @@ const CustomRoutes = () => {
               <Route index element={<ProtectedRoute isAdmin={true}><AdminTemplate><AdminUsersPage/></AdminTemplate></ProtectedRoute>}/>
               <Route path=":userId" element={<ProtectedRoute isAdmin={true}><AdminTemplate><AdminUsersEditPage/></AdminTemplate></ProtectedRoute>}/>
               <Route path="new" element={<ProtectedRoute isAdmin={true}><AdminTemplate><AdminUsersNewPage/></AdminTemplate></ProtectedRoute>}/>
+            </Route>
+            <Route path="vehicles">
+              <Route index element={<ProtectedRoute isAdmin={true}><AdminTemplate><AdminVehiclesPage/></AdminTemplate></ProtectedRoute>}/>
+              <Route path=":vehicleId" element={<ProtectedRoute isAdmin={true}><AdminTemplate><AdminVehicleEditPage/></AdminTemplate></ProtectedRoute>}/>
+              <Route path="new" element={<ProtectedRoute isAdmin={true}><AdminTemplate><AdminVehiclesNewPage/></AdminTemplate></ProtectedRoute>}/>
+            </Route>
+            <Route path="reservations">
+              <Route index element={<ProtectedRoute isAdmin={true}><AdminTemplate><AdminReservationsPage/></AdminTemplate></ProtectedRoute>}/>
+              <Route path=":reservationId" element={<ProtectedRoute isAdmin={true}><AdminTemplate><AdminReservationEditPage/></AdminTemplate></ProtectedRoute>}/>
             </Route>
           </Route>
 

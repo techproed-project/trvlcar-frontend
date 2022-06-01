@@ -16,6 +16,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../../../api/admin-user-service";
 
+
 const AdminUserNew = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const AdminUserNew = () => {
     address: "",
     zipCode: "",
     password: "",
-    roles: ["Customer"],   
+    roles: [],   
   };
 
   const validationSchema = Yup.object({
