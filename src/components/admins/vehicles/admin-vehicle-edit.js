@@ -13,11 +13,17 @@ import {
   Alert,
 } from "react-bootstrap";
 import { useNavigate, useParams, Link } from "react-router-dom";
+import { getVehicle } from "../../../api/vehicle-service";
+import { uploadVehicleImage } from "../../../api/admin-vehicle-service";
+import { toast } from "react-toastify";
 
 const AdminVehicleEdit = () => {
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const { vehicleId } = useParams();
+  const [imageSrc, setImageSrc] = useState("");
+  const fileImageRef = useRef();
+  const navigate = useNavigate();
 
   const [initialValues, setInitialValues] = useState({
     id: "",
@@ -46,7 +52,28 @@ const AdminVehicleEdit = () => {
     pricePerHour: Yup.number().required("Please enter price per hour"),
   });
 
-  const onSubmit = async (values) => {};
+  const onSubmit = async (values) => {
+    try {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("file", values.image);
+
+      const respUpload = await uploadVehicleImage(formData);
+      const imageId = respUpload.data.imageId;
+
+      const vehicleDto = { ...values };
+      delete vehicleDto["image"];
+
+      //await createVehicle(imageId, vehicleDto);
+      toast("Vehicle created successfully");
+      navigate(-1);
+    } catch (err) {
+      toast(err.response.data.message);
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -55,12 +82,54 @@ const AdminVehicleEdit = () => {
     onSubmit,
   });
 
+  const handleSelectImage = () => {
+    fileImageRef.current.click();
+  };
+
+  const handleImageChange = () => {
+    const file = fileImageRef.current.files[0];
+    console.log(file);
+    if (!file) return;
+
+    // formik state inin manuel olarak set ettik. Seçilen dosyayı image alanına yerleştirdik
+    formik.setFieldValue("image", file);
+
+    // Seçilen görüntüyü ekrana yerleştirdik
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onloadend = () => {
+      setImageSrc(reader.result);
+    };
+  };
+
+  const loadData = async () => {
+    try {
+      const resp = await getVehicle(vehicleId);
+      setInitialValues(resp.data);
+      const image = `${process.env.REACT_APP_API_URL}/files/display/${resp.data.image[0]}`;
+      setImageSrc(image);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
   return (
     <Form noValidate onSubmit={formik.handleSubmit}>
       <Row>
         <Col lg={3} className="image-area">
-          <Form.Control type="file" name="image" />
-
+          <Form.Control
+            type="file"
+            name="image"
+            className="d-none"
+            ref={fileImageRef}
+            onChange={handleImageChange}
+          />
+          <img src={imageSrc} className="img-fluid" />
           {formik.errors.image && (
             <Badge bg="danger" className="image-area-error">
               Please select an image
@@ -68,6 +137,7 @@ const AdminVehicleEdit = () => {
           )}
           <Button
             variant={formik.errors.image ? "danger" : "primary"}
+            onClick={handleSelectImage}
           >
             Select Image
           </Button>
