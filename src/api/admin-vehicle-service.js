@@ -4,16 +4,32 @@ import authHeader from "./auth-header";
 const API_URL = process.env.REACT_APP_API_URL;
 
 const createVehicle = (imageId, vehicle) => {
-  return axios.post(`${API_URL}/car/admin/${imageId}/add`, vehicle, { headers: authHeader() });
+  return axios.post(`${API_URL}/car/admin/${imageId}/add`, vehicle, {
+    headers: authHeader(),
+  });
+};
+
+const updateVehicle = (vehicleId, imageId, vehicle) => {
+  return axios.put(
+    `${API_URL}/car/admin/auth?id=${vehicleId}&imageId=${imageId}`,
+    vehicle,
+    { headers: authHeader() }
+  );
+};
+
+const deleteVehicle = (id) => {
+  return axios.delete(
+    `${API_URL}/car/admin/${id}/auth`,
+    { headers: authHeader() }
+  );
 };
 
 const uploadVehicleImage = (image) => {
   return axios.post(`${API_URL}/files/upload`, image, {
     headers: {
       ...authHeader(),
-      "Content-Type":
-        "multipart/form-data",
-    }
+      "Content-Type": "multipart/form-data",
+    },
   });
 };
 
@@ -24,11 +40,8 @@ const downloadVehicles = () => {
       "Content-Type":
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     },
-    responseType: 'blob'
+    responseType: "blob",
   });
 };
 
-
-
-
-export {  createVehicle, downloadVehicles, uploadVehicleImage };
+export { createVehicle, updateVehicle, deleteVehicle, downloadVehicles, uploadVehicleImage };

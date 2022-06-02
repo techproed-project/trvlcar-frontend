@@ -14,8 +14,13 @@ import {
 } from "react-bootstrap";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { getVehicle } from "../../../api/vehicle-service";
-import { uploadVehicleImage } from "../../../api/admin-vehicle-service";
+import {
+  deleteVehicle,
+  updateVehicle,
+  uploadVehicleImage,
+} from "../../../api/admin-vehicle-service";
 import { toast } from "react-toastify";
+import alertify from "alertifyjs";
 
 const AdminVehicleEdit = () => {
   const [loading, setLoading] = useState(false);
@@ -24,6 +29,8 @@ const AdminVehicleEdit = () => {
   const [imageSrc, setImageSrc] = useState("");
   const fileImageRef = useRef();
   const navigate = useNavigate();
+
+  const [isImageChanged, setIsImageChanged] = useState(false);
 
   const [initialValues, setInitialValues] = useState({
     id: "",
@@ -55,17 +62,23 @@ const AdminVehicleEdit = () => {
   const onSubmit = async (values) => {
     try {
       setLoading(true);
-      const formData = new FormData();
-      formData.append("file", values.image);
 
-      const respUpload = await uploadVehicleImage(formData);
-      const imageId = respUpload.data.imageId;
+      let imageId = values.image[0];
+      if (isImageChanged) {
+        const formData = new FormData();
+        formData.append("file", values.image);
+
+        const respUpload = await uploadVehicleImage(formData);
+        imageId = respUpload.data.imageId;
+        setIsImageChanged(false);
+      }
 
       const vehicleDto = { ...values };
       delete vehicleDto["image"];
 
-      //await createVehicle(imageId, vehicleDto);
-      toast("Vehicle created successfully");
+      await updateVehicle(vehicleId, imageId, vehicleDto);
+      toast("Vehicle updated successfully");
+
       navigate(-1);
     } catch (err) {
       toast(err.response.data.message);
@@ -88,7 +101,6 @@ const AdminVehicleEdit = () => {
 
   const handleImageChange = () => {
     const file = fileImageRef.current.files[0];
-    console.log(file);
     if (!file) return;
 
     // formik state inin manuel olarak set ettik. Seçilen dosyayı image alanına yerleştirdik
@@ -101,6 +113,32 @@ const AdminVehicleEdit = () => {
     reader.onloadend = () => {
       setImageSrc(reader.result);
     };
+    setIsImageChanged(true);
+  };
+
+  const removeVehicle = async () => {
+    try {
+      setDeleting(true);
+      await deleteVehicle(vehicleId);
+      toast("Vehicle deleted");
+      navigate(-1);
+    } catch (err) {
+      toast(err.response.data.message);
+      console.log(err);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const handleDelete = () => {
+    alertify.confirm(
+      "Delete",
+      "Are you sure want to delete?",
+      () => {
+        removeVehicle();
+      },
+      () => {}
+    );
   };
 
   const loadData = async () => {
@@ -289,7 +327,12 @@ const AdminVehicleEdit = () => {
                 )}{" "}
                 Save
               </Button>
-              <Button type="button" variant="danger" disabled={deleting}>
+              <Button
+                type="button"
+                variant="danger"
+                disabled={deleting}
+                onClick={handleDelete}
+              >
                 {deleting && (
                   <Spinner animation="border" variant="light" size="sm" />
                 )}{" "}
