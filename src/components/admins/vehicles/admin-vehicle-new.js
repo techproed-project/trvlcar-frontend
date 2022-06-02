@@ -13,10 +13,12 @@ import {
   Badge,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import "./admin-vehicle.css";
 
 const AdminVehicleNew = () => {
   const [loading, setLoading] = useState(false);
   const [imageSrc, setImageSrc] = useState("");
+  const fileImageRef = useRef();
 
   const initialValues = {
     model: "",
@@ -56,6 +58,29 @@ const AdminVehicleNew = () => {
     onSubmit,
   });
 
+  const handleSelectImage = () => { 
+    fileImageRef.current.click();
+  }
+
+  const handleImageChange = () => { 
+    const file = fileImageRef.current.files[0];
+    console.log(file);
+    if(!file) return;
+
+    // formik state inin manuel olarak set ettik. Seçilen dosyayı image alanına yerleştirdik
+    formik.setFieldValue("image", file);
+
+    // Seçilen görüntüyü ekrana yerleştirdik
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onloadend = () => {
+      setImageSrc(reader.result);
+    }
+
+
+  }
+
   
   return (
     <Form noValidate onSubmit={formik.handleSubmit}>
@@ -64,7 +89,11 @@ const AdminVehicleNew = () => {
           <Form.Control
             type="file"
             name="image"
+            className="d-none"
+            ref={fileImageRef}
+            onChange={handleImageChange}
           />
+          <img src={imageSrc} className="img-fluid"/>
           {formik.errors.image && (
             <Badge bg="danger" className="image-area-error">
               Please select an image
@@ -72,6 +101,7 @@ const AdminVehicleNew = () => {
           )}
           <Button
             variant={formik.errors.image ? "danger" : "primary"}
+            onClick={handleSelectImage}
           >
             Select Image
           </Button>
