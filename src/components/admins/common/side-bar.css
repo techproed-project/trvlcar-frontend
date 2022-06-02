@@ -25,6 +25,7 @@
 
 
 @media(min-width: 992px){
+
     .admin-navbar .navbar-nav{
         flex-direction: column !important;
     }

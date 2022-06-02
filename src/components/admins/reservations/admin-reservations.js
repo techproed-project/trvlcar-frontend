@@ -62,6 +62,7 @@ const AdminReservations = () => {
       name: "Price",
       selector: (row) => row.totalPrice,
       sortable: true,
+      format: (row)=> `$ ${row.totalPrice.toLocaleString()}`
     },
     {
       name: "Status",
