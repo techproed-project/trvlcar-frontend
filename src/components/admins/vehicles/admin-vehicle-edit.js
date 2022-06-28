@@ -168,7 +168,7 @@ const AdminVehicleEdit = () => {
             onChange={handleImageChange}
           />
           <img src={imageSrc} className="img-fluid" />
-          {formik.errors.image && (
+          {formik.errors.image (
             <Badge bg="danger" className="image-area-error">
               Please select an image
             </Badge>
