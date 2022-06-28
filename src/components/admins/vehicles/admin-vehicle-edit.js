@@ -23,7 +23,8 @@ import { toast } from "react-toastify";
 import alertify from "alertifyjs";
 
 const AdminVehicleEdit = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const { vehicleId } = useParams();
   const [imageSrc, setImageSrc] = useState("");
@@ -43,6 +44,7 @@ const AdminVehicleEdit = () => {
     fuelType: "",
     age: "",
     pricePerHour: "",
+    image:""
   });
 
   const validationSchema = Yup.object({
@@ -61,7 +63,7 @@ const AdminVehicleEdit = () => {
 
   const onSubmit = async (values) => {
     try {
-      setLoading(true);
+      setUpdating(true);
 
       let imageId = values.image[0];
       if (isImageChanged) {
@@ -84,7 +86,7 @@ const AdminVehicleEdit = () => {
       toast(err.response.data.message);
       console.log(err);
     } finally {
-      setLoading(false);
+      setUpdating(false);
     }
   };
 
@@ -143,6 +145,7 @@ const AdminVehicleEdit = () => {
 
   const loadData = async () => {
     try {
+      setLoading(true);
       const resp = await getVehicle(vehicleId);
       setInitialValues(resp.data);
       const image = `${process.env.REACT_APP_API_URL}/files/display/${resp.data.image[0]}`;
@@ -150,12 +153,16 @@ const AdminVehicleEdit = () => {
     } catch (err) {
       console.log(err);
     }
+    finally{
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     loadData();
   }, []);
 
+  if(!loading)
   return (
     <Form noValidate onSubmit={formik.handleSubmit}>
       <Row>
@@ -168,7 +175,7 @@ const AdminVehicleEdit = () => {
             onChange={handleImageChange}
           />
           <img src={imageSrc} className="img-fluid" />
-          {formik.errors.image (
+          {formik.errors.image && (
             <Badge bg="danger" className="image-area-error">
               Please select an image
             </Badge>
@@ -321,8 +328,8 @@ const AdminVehicleEdit = () => {
         <ButtonGroup aria-label="Basic example">
           {!initialValues.builtIn && (
             <>
-              <Button variant="primary" type="submit" disabled={loading}>
-                {loading && (
+              <Button variant="primary" type="submit" disabled={updating}>
+                {updating && (
                   <Spinner animation="border" variant="light" size="sm" />
                 )}{" "}
                 Save
